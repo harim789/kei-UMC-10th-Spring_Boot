@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     // private final ReviewService reviewService; 6주차에 활성화
