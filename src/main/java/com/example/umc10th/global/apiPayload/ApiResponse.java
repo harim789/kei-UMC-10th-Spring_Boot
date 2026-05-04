@@ -24,12 +24,12 @@ public class ApiResponse<T> {
     @JsonProperty("result")
     private final T result;
 
-    // 성공한 결우 (result 포함)
+    // 성공한 경우 (result 포함)
     public static <T> ApiResponse<T> onSuccess(BaseSuccessCode code, T result) {
         return new ApiResponse<>(true, code.getCode(), code.getMessage(), result);
     }
 
-    // 성공한 경우 (reuslt 없음)
+    // 성공한 경우 (result 없음)
     public static <T> ApiResponse<T> onSuccess(BaseSuccessCode code) {
         return new ApiResponse<>(true, code.getCode(), code.getMessage(), null);
     }
