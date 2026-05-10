@@ -1,4 +1,47 @@
 package com.example.umc10th.domain.mission.converter;
 
+import com.example.umc10th.domain.member.entity.Member;
+import com.example.umc10th.domain.mission.dto.MissionResDTO;
+import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
 public class MissionConverter {
+
+    // 미션 단건 정보
+    public static MissionResDTO.MissionInfo toMissionInfo(MemberMission mm) {
+        return MissionResDTO.MissionInfo.builder()
+                .missionId(mm.getMission().getId())
+                .storeId(mm.getMission().getStore().getId())
+                .storeName(mm.getMission().getStore().getName())
+                .condition(mm.getMission().getConditional())
+                .rewardPoint(mm.getMission().getPoint())
+                .status(mm.isComplete() ? "COMPLETED" : "IN_PROGRESS")
+                .deadline(mm.getMission().getDeadline())
+                .completedAt(mm.isComplete() ? mm.getUpdatedAt() : null)
+                .build();
+    }
+
+    // 페이지 정보
+    public static MissionResDTO.PageInfo toPageInfo(Page<MemberMission> page) {
+        return MissionResDTO.PageInfo.builder()
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+    }
+
+    // 전체 응답(미션 목록 응답) (페이징 포함!)
+    public static MissionResDTO.MissionList toMissionList(Page<MemberMission> page) {
+        List<MissionResDTO.MissionInfo> missions = page.getContent().stream()
+                .map(MissionConverter::toMissionInfo)
+                .toList();
+
+        return MissionResDTO.MissionList.builder()
+                .missions(missions)
+                .pageInfo(toPageInfo(page))
+                .build();
+    }
 }
