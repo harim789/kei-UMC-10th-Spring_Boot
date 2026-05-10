@@ -3,6 +3,7 @@ package com.example.umc10th.domain.member.converter;
 import com.example.umc10th.domain.member.dto.MemberResDTO;
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -53,15 +54,28 @@ public class MemberConverter {
     }
 
     // 홈 - 전체 응답
-    public static MemberResDTO.Home toHome(Member member, Long received, Long completed, Long inProgress, List<MemberMission> receivedMissions) {
-        List<MemberResDTO.ReceivedMission> missionList = receivedMissions.stream()// receivedMissions.stream(): receivedMissions 라는 리스트를 하나씩 처리하기 위해 스트림으로 변환
-                .map(MemberConverter::toReceivedMission) // 리스트 안에 있는 각 엔티티를 DTO로 변환
-                .toList(); // 변환된 것들을 리스트로 묶어서 반환
+    public static MemberResDTO.Home toHome(
+            Member member, Long received, Long completed, Long inProgress,
+            Page<MemberMission> missionPage
+    ) {
+        // 1. Page에서 실제 데이터(List)를 꺼내서 DTO로 변환
+        List<MemberResDTO.ReceivedMission> missionList = missionPage.getContent().stream() // Page에서 실제 데이터 리스트를 가져옴
+                .map(MemberConverter::toReceivedMission)
+                .toList();
+
+        // 2. Page에서 페이징 정보 꺼내서 PageInfo DTO 생성
+        MemberResDTO.PageInfo pageInfo = MemberResDTO.PageInfo.builder()
+                .page(missionPage.getNumber())
+                .size(missionPage.getSize())
+                .totalElements(missionPage.getTotalElements())
+                .totalPages(missionPage.getTotalPages())
+                .build();
 
         return MemberResDTO.Home.builder()
                 .member(toHomeMember(member)) // 회원 정보 변환
                 .missionSummary(toMissionSummary(received, completed, inProgress)) // 미션 요약 변환
                 .receivedMissions(missionList) // 받은 미션 리스트 설정
+                .pageInfo(pageInfo)
                 .build();
     }
 }

@@ -23,7 +23,10 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
 
     // 홈 화면용: 내가 받은 모든 미션 (status별 카운트용)
     @Query("SELECT mm FROM MemberMission mm WHERE mm.member.id = :memberId")
-    List<MemberMission> findAllByMemberId(@Param("memberId") Long memberId);
+    Page<MemberMission> findAllByMemberId(
+            @Param("memberId") Long memberId,
+            Pageable pageable
+    );
 
     // 카운트 쿼리들 (홈 화면 미션 요약용)
     @Query("SELECT COUNT(mm) FROM MemberMission mm WHERE mm.member.id = :memberId")

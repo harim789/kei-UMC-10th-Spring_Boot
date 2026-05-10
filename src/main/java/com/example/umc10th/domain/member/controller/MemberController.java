@@ -35,8 +35,12 @@ public class MemberController {
 
     // 2. 홈 화면 조회
     @GetMapping("/home")
-    public ApiResponse<MemberResDTO.Home> getHome(@RequestParam Long memberId) { // @RequestParam: URL 뒤에 붙는 쿼리 파라미터를 받을 때 쓴다.
-        MemberResDTO.Home result = memberService.getHome(memberId);
+    public ApiResponse<MemberResDTO.Home> getHome(
+            @RequestParam Long memberId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) { // @RequestParam: URL 뒤에 붙는 쿼리 파라미터를 받을 때 쓴다.
+        MemberResDTO.Home result = memberService.getHome(memberId, page, size);
         return ApiResponse.onSuccess(MemberSuccessCode.GET_HOME, result);
     }
 

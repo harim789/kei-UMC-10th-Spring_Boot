@@ -9,6 +9,9 @@ import com.example.umc10th.domain.member.repository.MemberRepository;
 import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,18 +33,21 @@ public class MemberService {
     }
 
     // 홈 화면
-    public MemberResDTO.Home getHome(Long memberId) {
+    public MemberResDTO.Home getHome(Long memberId, Integer page, Integer size) {
+        // 1. Member 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        // 미션 카운트 조회
+        // 2. 미션 카운트 조회
         Long received = memberMissionRepository.countByMemberId(memberId);
         Long completed = memberMissionRepository.countByMemberIdAndStatus(memberId, true);
         Long inProgress = memberMissionRepository.countByMemberIdAndStatus(memberId, false);
 
-        // 받은 미션 목록 조회
-        List<MemberMission> missions = memberMissionRepository.findAllByMemberId(memberId);
+        // 3. Pageable 생성 후 페이징 쿼리 호출
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MemberMission> missionPage = memberMissionRepository.findAllByMemberId(memberId, pageable);
 
-        return MemberConverter.toHome(member, received, completed, inProgress, missions);
+        // 4. 컨버터로 변환
+        return MemberConverter.toHome(member, received, completed, inProgress, missionPage);
     }
 }

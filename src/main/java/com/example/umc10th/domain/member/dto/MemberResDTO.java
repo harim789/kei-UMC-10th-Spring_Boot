@@ -44,12 +44,22 @@ public class MemberResDTO {
             LocalDate deadline
     ) {}
 
+    // 페이지 정보
+    @Builder
+    public record PageInfo(
+            Integer page,
+            Integer size,
+            Long totalElements,
+            Integer totalPages
+    ) {}
+
     // 홈 화면 응답 (최종)
     @Builder
     public record Home(
             HomeMember member,
             MissionSummary missionSummary,
-            List<ReceivedMission> receivedMissions
+            List<ReceivedMission> receivedMissions,
+            PageInfo pageInfo
     ) {}
 
     // 마이페이지 응답
