@@ -13,6 +13,8 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
 
     // 내 미션 (진행중 / 완료 상태별 페이징) - @Query 사용
     @Query("SELECT mm FROM MemberMission mm " +
+            "JOIN FETCH mm.mission m " +
+            "JOIN FETCH m.store " +
             "WHERE mm.member.id = :memberId " +
             "AND mm.isComplete = :isComplete")
     Page<MemberMission> findByMemberIdAndStatus(
@@ -22,7 +24,10 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     );
 
     // 홈 화면용: 내가 받은 모든 미션 (status별 카운트용)
-    @Query("SELECT mm FROM MemberMission mm WHERE mm.member.id = :memberId")
+    @Query("SELECT mm FROM MemberMission mm " +
+            "JOIN FETCH mm.mission m " +
+            "JOIN FETCH m.store " +
+            "WHERE mm.member.id = :memberId")
     Page<MemberMission> findAllByMemberId(
             @Param("memberId") Long memberId,
             Pageable pageable
