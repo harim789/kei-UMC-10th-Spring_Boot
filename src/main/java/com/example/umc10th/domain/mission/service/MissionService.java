@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MissionService {
 
-    private final MemberMissionRepository missionRepository;
     private final MemberMissionRepository memberMissionRepository;
 
     // 내 미션 목록 (진행중 / 완료 + 페이징)
