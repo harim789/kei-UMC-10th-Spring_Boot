@@ -11,6 +11,7 @@ public class MissionConverter {
     // 미션 단건 정보
     public static MissionResDTO.MissionInfo toMissionInfo(MemberMission mm) {
         return MissionResDTO.MissionInfo.builder()
+                .memberMissionId(mm.getId())
                 .missionId(mm.getMission().getId())
                 .storeId(mm.getMission().getStore().getId())
                 .storeName(mm.getMission().getStore().getName())
