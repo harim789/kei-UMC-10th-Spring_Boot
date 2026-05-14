@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.member.dto;
 
+import com.example.umc10th.global.dto.PageInfoDTO;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -49,7 +50,8 @@ public class MemberResDTO {
     public record Home(
             HomeMember member,
             MissionSummary missionSummary,
-            List<ReceivedMission> receivedMissions
+            List<ReceivedMission> receivedMissions,
+            PageInfoDTO pageInfo
     ) {}
 
     // 마이페이지 응답
