@@ -9,4 +9,9 @@ public class MissionReqDTO {
     public record CompleteMission(
             Boolean completed
     ) {}
+
+    @Builder
+    public record MyInProgressMissionRequest(
+            Long memberId
+    ) {}
 }
