@@ -5,6 +5,7 @@ import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class MissionController {
     // 4(1). 내가 진행중인 미션만 조회 (사용자 ID는 Body로 받음, 오프셋 기반 페이지네이션)
     @GetMapping("/member-missions/in-progress")
     public ApiResponse<MissionResDTO.MissionList> getMyInProgressMissions(
-            @RequestBody MissionReqDTO.MyInProgressMissionRequest request,
+            @Valid @RequestBody MissionReqDTO.MyInProgressMissionRequest request,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ) {
@@ -47,7 +48,7 @@ public class MissionController {
     @PatchMapping("/member-missions/{memberMissionId}/complete")
     public ApiResponse<MissionResDTO.CompleteMission> completeMission(
             @PathVariable Long memberMissionId,
-            @RequestBody MissionReqDTO.CompleteMission request
+            @Valid @RequestBody MissionReqDTO.CompleteMission request
     ) {
         // 6주차에서 missionService.completeMission(memberMissionId, request)로 교체
         MissionResDTO.CompleteMission result = MissionResDTO.CompleteMission.builder()
