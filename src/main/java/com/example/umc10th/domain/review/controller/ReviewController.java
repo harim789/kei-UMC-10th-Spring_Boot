@@ -46,7 +46,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE_REVIEW, result);
     }
 
-    // 8. 내가 작성한 리뷰 조회
+    // 8. 내가 작성한 리뷰 조회 (오프셋 기반 페이지네이션)
     @GetMapping("/members/me/review")
     public ApiResponse<ReviewResDTO.MyReviewList> getMyReviews(
             @RequestParam Long memberId,
@@ -54,6 +54,18 @@ public class ReviewController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         ReviewResDTO.MyReviewList result = reviewService.getMyReviews(memberId, page, size);
+        return ApiResponse.onSuccess(ReviewSuccessCode.GET_MY_REVIEWS, result);
+    }
+
+    // 8.1 커서 기반 리뷰 조회 (ID / 별점 순)
+    @GetMapping("/member/me/reviews/cursor")
+    public ApiResponse<ReviewResDTO.MyReviewSliceList> getMyReviewsByCursor(
+            @RequestParam Long memberId,
+            @RequestParam(defaultValue = "id") String sort, // "id" or "star"
+            @RequestParam(required = false) String cursor, // 첫 요청은 비움
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        ReviewResDTO.MyReviewSliceList result = reviewService.getMyReviewsByCursor(memberId, sort, cursor, size);
         return ApiResponse.onSuccess(ReviewSuccessCode.GET_MY_REVIEWS, result);
     }
 }
