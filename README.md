@@ -7,4 +7,4 @@
 ## 👤 Author
 
 - GitHub: [@harim789](https://github.com/harim789)
-- UMC 10기 서버 파트
+- UMC 10기 스프링부트 파트
