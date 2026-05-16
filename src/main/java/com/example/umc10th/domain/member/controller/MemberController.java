@@ -5,6 +5,7 @@ import com.example.umc10th.domain.member.dto.MemberResDTO;
 import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class MemberController {
     // 1. 회원가입
     @PostMapping("/auth/signup")
     public ApiResponse<MemberResDTO.SignUp> signUp(
-            @RequestBody MemberReqDTO.SignUp request
+            @Valid @RequestBody MemberReqDTO.SignUp request
     ) {
         // 6주차에서 memberService.signUp(request)로 교체
         MemberResDTO.SignUp result = MemberResDTO.SignUp.builder()

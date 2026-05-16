@@ -5,6 +5,7 @@ import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,14 +26,7 @@ public class ReviewController {
     public ApiResponse<ReviewResDTO.StoreInfo> getStoreInfo(
             @PathVariable Long storeId
     ) {
-        // TODO: 6주차에서 reviewService.getStoreInfo(storeId)로 교체
-        ReviewResDTO.StoreInfo result = ReviewResDTO.StoreInfo.builder()
-                .storeId(storeId)
-                .name("신승호라멘")
-                .foodType("KOREAN")
-                .address("서울 중구 ...")
-                .build();
-
+        ReviewResDTO.StoreInfo result = reviewService.getStoreInfo(storeId);
         return ApiResponse.onSuccess(ReviewSuccessCode.GET_STORE_INFO, result);
     }
 
@@ -40,7 +34,7 @@ public class ReviewController {
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.CreateReview> createReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDTO.CreateReview request
+            @Valid @RequestBody ReviewReqDTO.CreateReview request
     ) {
         ReviewResDTO.CreateReview result = reviewService.createReview(storeId, request);
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE_REVIEW, result);
